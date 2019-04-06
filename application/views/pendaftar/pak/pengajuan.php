@@ -1,0 +1,68 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Form Pengajuan</h1>
+
+    <form action="" method="post">
+        <?php $user = $this->db->get_where('user',['username' => $this->session->userdata('username')])->row(); ?>
+
+        <input type="hidden" name="pendaftar_id" value="<?= $user->pendaftar_id ?>">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <td>Unsur</td>
+                    <td>Sub Unsur Penilaian</td>
+                    <td>Butir Kegiatan</td>
+                </tr>
+            </thead>
+            <tbody>
+            
+                <tr>
+                    <td colspan="3">
+                        Unsur Utama Pendidikan
+                    </td>
+                </tr>
+
+                <?php
+                foreach($kegiatan as $k): ?>
+                <tr>
+                    <td><?= $k->unsur; ?></td>
+                    <td><?= $k->sub_unsur; ?></td>
+                    <?php
+                    $unsur = $this->db->get_where('kegiatan', ['unsur_id' => $k->unsur_id]);
+                    $dataUnsur = $unsur->result();
+
+                    if($unsur->num_rows() > 1): ?>
+                        <td>
+                            <?php foreach($dataUnsur as $d): ?>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="kegiatan_id[]" id="<?= $d->kegiatan ?>" value="<?= $d->id ?>">
+                                    <label class="form-check-label" for="<?= $d->kegiatan ?>">
+                                        <?= $d->kegiatan ?>
+                                    </label>
+                                </div>
+                            <?php endforeach; ?>
+                        </td>
+                    <?php else : ?>
+                       <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="kegiatan_id[]" id="<?= $k->kegiatan ?>" value="<?= $k->id ?>">
+                                <label class="form-check-label" for="<?= $k->kegiatan ?>">
+                                    <?= $k->kegiatan ?>
+                                </label>
+                            </div>
+                       </td>
+                    <?php endif; ?>
+
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+        <a href="<?= base_url('pendaftar/pak') ?>" class="btn btn-secondary">Kembali</a>
+    </form>
+
+</div>
+<!-- /.container-fluid -->

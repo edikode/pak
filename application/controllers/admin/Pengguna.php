@@ -4,12 +4,13 @@ class Pengguna extends CI_Controller {
     public  function __construct()
     {
         parent::__construct();
+        cek_login();
         $this->load->model('Pengguna_model');
     }
 
 	public function index()
 	{
-        $queryUser = "SELECT `user`.`id`, `user`.`pegawai_id`, `user`.`username`, 
+        $queryUser = "SELECT `user`.`id`, `user`.`pegawai_id`, `user`.`pendaftar_id`, `user`.`username`, 
                         `user`.`is_active`, `role`.`nama` as `level`
                         FROM `user` 
                         JOIN `role`

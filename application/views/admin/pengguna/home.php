@@ -38,19 +38,19 @@
             </thead>
             <tbody>
                 <?php $i=1; foreach($pengguna as  $p) : 
-                    $dataPegawai = $this->db->get_where('pegawai',['id' => $p->pegawai_id])->row();
-                    if(!$dataPegawai){
-                        continue;
+                    $dataPengguna = $this->db->get_where('pegawai',['id' => $p->pegawai_id])->row();
+                    if(!$dataPengguna){
+                        $dataPengguna = $this->db->get_where('pendaftar',['id' => $p->pendaftar_id])->row();
                     }
                     ?>
                     <tr>
                         <td><?= $i++; ?></td>
-                        <td><?= $dataPegawai->nama; ?></td>
+                        <td><?= $dataPengguna->nama; ?></td>
                         <td><?= $p->username; ?></td>
                         <td><?= $p->level; ?></td>
                         <td><?php if($p->is_active == 1) echo "Aktif"; else echo "Tidak Aktif"; ?></td>
                         <td>
-                            <a href="<?= base_url('admin/pengguna/hapus/'.$p->id) ?>" onclick="return confirm('Hapus?');" class="badge badge-danger float-right tombol-hapus">Hapus</a>
+                            <a href="<?= base_url('admin/pengguna/hapus/'.$p->id) ?>" onclick="return confirm('Hapus?');" class="badge badge-danger float-right tombol-hapus mb-1">Hapus</a>
                             <a href="<?= base_url('admin/pengguna/detail/'.$p->id) ?>" class="badge badge-success float-right mr-1">Detail</a>
                         </td>
                     </tr>

@@ -117,6 +117,36 @@
     <!-- Page level custom scripts -->
     <script src="<?= base_url(); ?>assets/js/demo/datatables-demo.js"></script>
 
+    <script>
+        $('.gambar').on('change', function(){
+            let fileName = $(this).val().split('\\').pop();
+
+            if( fileName ){
+                document.getElementById('form1').submit();
+            }
+
+        });
+
+        $('.cek-validasi').on('click', function(){
+            const dataId = $(this).data('id');
+            const dataValidasi = $(this).data('validasi');
+            const dataRekapId = $(this).data('rekapid');
+
+            $.ajax({
+                url: "<?= base_url('penilai/pak/lakukanvalidasi'); ?>",
+                type: 'post',
+                data: {
+                    dataId: dataId,
+                    dataValidasi: dataValidasi,
+                },
+                success: function(){
+                    document.location.href = "<?= base_url('penilai/pak/validasi/'); ?>" + dataRekapId;
+                }
+            });
+        });
+
+    </script>
+
 </body>
 
 </html>

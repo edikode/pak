@@ -14,6 +14,11 @@
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
 
+        <?php if($this->session->userdata('role_id') == 4) : ?>
+        <?php
+        $rekapNilai = $this->db->get_where('rekap_nilai',['status' => 2, 'pendaftar_id' => $this->session->userdata('id')])->row();
+        if($rekapNilai) :
+        ?>
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -26,21 +31,61 @@
                 <h6 class="dropdown-header">
                     Pemberitahuan
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a class="dropdown-item d-flex align-items-center" href="<?= base_url('pendaftar/pak/upload/'.$rekapNilai->id) ?>">
                     <div class="mr-3">
                         <div class="icon-circle bg-primary">
                             <i class="fas fa-file-alt text-white"></i>
                         </div>
                     </div>
                     <div>
-                    <div class="small text-gray-500">12 Maret 2019</div>
-                    <span class="font-weight-bold">Pendaftar baru belum divalidasi!</span>
+                    <span class="font-weight-bold">Pengajuan ditolak, cek berkas anda kembali!</span>
+                    <div class="small text-gray-500">Tanggal pengajuan : <?= date('d-m-Y',$rekapNilai->tanggal) ?></div>
                     </div>
                 </a>
                 
-                <a class="dropdown-item text-center small text-gray-500" href="#">Tampilkan Semua</a>
+                <a class="dropdown-item text-center small text-gray-500" href="<?= base_url('pendaftar/pak') ?>">Tampilkan Semua</a>
             </div>
         </li>
+        <?php endif; ?>
+        <?php endif; ?>
+
+        <!-- pemberitahuan untuk penilai -->
+        <?php if($this->session->userdata('role_id') == 3) : ?>
+        <?php
+        $rekapNilai = $this->db->get_where('rekap_nilai',['status' => 0])->result();
+        if($rekapNilai) :
+        ?>
+        <!-- Nav Item - Alerts -->
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell fa-fw"></i>
+            <!-- Counter - Alerts -->
+            <span class="badge badge-danger badge-counter">!</span>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                    Pemberitahuan
+                </h6>
+                <?php foreach ($rekapNilai as $rekapNilai) : ?>
+                <a class="dropdown-item d-flex align-items-center" href="<?= base_url('penilai/pak/validasi/'.$rekapNilai->id) ?>">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-primary">
+                            <i class="fas fa-file-alt text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                    <span class="font-weight-bold">Pengajuan Baru, lakukan penilaian!</span>
+                    <div class="small text-gray-500">Tanggal pengajuan : <?= date('d-m-Y',$rekapNilai->tanggal) ?></div>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+                
+                <a class="dropdown-item text-center small text-gray-500" href="<?= base_url('penilai/pak') ?>">Tampilkan Semua</a>
+            </div>
+        </li>
+        <?php endif; ?>
+        <?php endif; ?>
 
         <div class="topbar-divider d-none d-sm-block"></div>
 

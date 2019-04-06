@@ -41,7 +41,7 @@
                         <td><?= $u->unsur; ?></td>
                         <td><?= $u->sub_unsur; ?></td>
                         <td>
-                            <a href="<?= base_url('admin/unsur/hapus/'.$u->id) ?>" onclick="return confirm('Hapus?');" class="badge badge-danger float-right tombol-hapus">Hapus</a>
+                            <a href="<?= base_url('admin/unsur/hapus/'.$u->id) ?>" onclick="return confirm('Hapus?');" class="badge badge-danger float-right tombol-hapus mb-1">Hapus</a>
                             <a href="<?= base_url('admin/unsur/edit/'.$u->id) ?>" class="badge badge-info float-right mr-1">Edit</a>
                         </td>
                     </tr>
