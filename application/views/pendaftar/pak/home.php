@@ -62,7 +62,7 @@
     </a>
     <?php endif; ?>
 
-    <!-- pengajuan ditolak -->
+    <!-- berkas ada yg ditolak -->
     <?php
     $dataRekapNilai = $this->db->get_where('rekap_nilai',['pendaftar_id' => $this->session->userdata('id'), 'status' => 2])->result();
     ?>
@@ -91,14 +91,12 @@
                         Mengajukan ke => <?= $jabatan2->nama ?> -->> <?= $jabatan2->pangkat ?> -->> <?= $jabatan2->gol_ruang ?><br><br>
 
                         <strong>Syarat Kelulusan</strong><br>
-                        Komulatif Minimal = <?= $jabatan2->komulatif_minimal ?><br>
-                        Perjenjang = <?= $jabatan2->perjenjang ?>
+                        ANGKA KREDIT KELULUSAN = <?= $jabatan2->perjenjang ?>
                         <br><br>
 
                         <a href="<?= base_url('pendaftar/pak/upload/'.$rekapnilai->id); ?>" class="btn btn-primary">Cek Berkas</a>
                     </div>
                 </div>
-                <hr>
             <?php endforeach;  ?>
             </div>
         </div>
@@ -133,21 +131,58 @@
                         Mengajukan ke => <?= $jabatan2->nama ?> -->> <?= $jabatan2->pangkat ?> -->> <?= $jabatan2->gol_ruang ?><br><br>
 
                         <strong>Syarat Kelulusan</strong><br>
-                        Komulatif Minimal = <?= $jabatan2->komulatif_minimal ?><br>
-                        Perjenjang = <?= $jabatan2->perjenjang ?>
+                        ANGKA KREDIT KELULUSAN = <?= $jabatan2->perjenjang ?>
                         <br><br>
 
-                        <?php $nilaiTotal = $queryKegiatan = "SELECT SUM(`kegiatan`.`angka_kredit`) as `nilai`
-                                FROM `kegiatan` 
-                                JOIN `nilai`
-                                ON `kegiatan`.`id` = `nilai`.`kegiatan_id`
-                                WHERE `nilai`.`rekap_nilai_id` = $rekapnilai->id AND `status` = 1
-                                ";
-                            $nilai = $this->db->query($nilaiTotal)->row(); ?>
-                        <strong>Nilai ANGKA KREDIT Anda : <?= $nilai->nilai ?></strong><br>
+                        <strong>Nilai Anda</strong><br>
+                        ANGKA KREDIT KESELURUHAN = <?= $rekapnilai->hasil_akk ?>
+                        <br><br>
                     </div>
                 </div>
-                <hr>
+            <?php endforeach;  ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- pengajuan  ditolak -->
+    <?php
+    $dataRekapNilai = $this->db->get_where('rekap_nilai',['pendaftar_id' => $this->session->userdata('id'), 'status' => 3])->result();
+    ?>
+    <?php if($dataRekapNilai) : ?>
+        <hr class='mt-5'>
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="h3 mb-4 text-gray-800">Hasil Pengajuan Ditolak</h1>
+
+                <?php foreach($dataRekapNilai as $rekapnilai) : ?>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Pengajuan Ke - <?= $rekapnilai->pengajuan_ke ?></h6>
+                    </div>
+                    <div class="card-body">
+                        Kelengkapan Berkas = <?php if($rekapnilai->lengkap == 1){ echo "<span class='badge badge-success'>Lengkap</span>"; } else { echo "<span class='badge badge-danger'>Belum Lengkap</span>"; } ?> <br>
+                        Status Pengajuan = <?php if($rekapnilai->status == 2){ echo "<span class='badge badge-danger'>Ditolak</span>"; } else if($rekapnilai->status == 3){ echo "<span class='badge badge-danger'>Ditolak</span>"; }  else { echo "<span class='badge badge-warning'>Belum Dinilai</span>"; } ?> <br>
+                        Tanggal Pengajuan = <?= date('d F Y',$rekapnilai->tanggal) ?> <br>
+                        <br>
+                        <strong>Jabatan</strong><br>
+                        <?php $jabatan = $this->db->get_where('jabatan',['id' => $rekapnilai->dari])->row(); ?>
+                        Dari => <?= $jabatan->nama ?> -->> <?= $jabatan->pangkat ?> -->> <?= $jabatan->gol_ruang ?><br>
+
+                        <?php $jabatan2 = $this->db->get_where('jabatan',['id' => $rekapnilai->dari+1])->row(); ?>
+                        Mengajukan ke => <?= $jabatan2->nama ?> -->> <?= $jabatan2->pangkat ?> -->> <?= $jabatan2->gol_ruang ?><br><br>
+
+                        <strong>Syarat Kelulusan</strong><br>
+                        ANGKA KREDIT KELULUSAN = <?= $jabatan2->perjenjang ?>
+                        <br><br>
+
+                        <strong>Nilai Anda</strong><br>
+                        ANGKA KREDIT KESELURUHAN = <?= $rekapnilai->hasil_akk ?>
+                        <br><br>
+
+                        <!-- <a href="<?= base_url('pendaftar/pak/upload/'.$rekapnilai->id); ?>" class="btn btn-primary">Cek Berkas</a> -->
+                    </div>
+                </div>
             <?php endforeach;  ?>
             </div>
         </div>

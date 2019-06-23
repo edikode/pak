@@ -43,7 +43,10 @@
                         Jabatan : <?= $jabatan->nama ?> <br>
                         Pangkat : <?= $jabatan->pangkat ?> <br>
                         Gol Ruang : <?= $jabatan->gol_ruang ?> <br>
-                        Jabatan Fungsional : <?= $pendaftar->jabatan_fungsional ?> <br>
+
+                        <?php $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['id' => $pendaftar->jabatan_fungsional_id])->row(); ?>
+
+                        Jabatan Fungsional : <?= $jabatan_fungsional->tugas ?> <br>
                         Alamat Rumah : <?= $pendaftar->alamat_rumah ?> <br>
                         Alamat Sekolah : <?= $pendaftar->alamat_sekolah ?> <br>
                         Telepon : <?= $pendaftar->telepon ?> <br>

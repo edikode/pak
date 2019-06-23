@@ -40,7 +40,6 @@ class Pak extends CI_Controller {
 
             // insert data ke rekap_nilai
             $dataRekapNilai = [
-                "nilai_total" => 0,
                 "status" => 0,
                 "tanggal" => time(),
                 "dari" => $cekJabatan->jabatan_id,
@@ -52,12 +51,26 @@ class Pak extends CI_Controller {
             $this->db->insert('rekap_nilai',$dataRekapNilai);
             $nilai_rekap_id = $this->db->insert_id();
 
-            // insert detail data ke tabel nilai
             foreach ($kegiatan_id as $kegiatan_id) {
+                
+                $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['kegiatan_id' => $kegiatan_id])->row();
+
+                // jika tidak ada hubungannya dengan jabatan fungsional, jenis default kosong
+                if($jabatan_fungsional){
+                    $jenis = $jabatan_fungsional->jenis;
+                    $jabatan_fungsional_id = $jabatan_fungsional->id;
+                } else {
+                    $jenis = $jabatan_fungsional->jenis;
+                    $jabatan_fungsional_id = "";
+                }
+                
+                // insert detail data ke tabel nilai
                 $dataNilai = [
+                    "jenis" => $jenis,
                     "tanggal" => time(),
                     "status" => 0,
                     "kegiatan_id" => $kegiatan_id,
+                    "jabatan_fungsional_id" => $jabatan_fungsional_id,
                     "rekap_nilai_id" => $nilai_rekap_id,
 
                 ];

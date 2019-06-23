@@ -59,8 +59,8 @@ class Pegawai extends CI_Controller {
     public function edit($id)
     {
         $data['pegawai'] = $this->Pegawai_model->get($id);
-        $data['status'] = ['BK','K'];
         $data['jabatan'] = ['Kepala Dinas','Sekertaris','Bendahara','Pegawai'];
+        $data['status'] = ['BK','K'];
         $data['agama'] = ['Islam','Kristen','Katolik','Hindu','Budha'];
 
         $this->form_validation->set_rules('nip', 'NIP', 'required|trim');

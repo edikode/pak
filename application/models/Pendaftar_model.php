@@ -33,7 +33,7 @@ class Pendaftar_model extends CI_model {
             "tugas_mengajar" => $this->input->post('tugas_mengajar', true),
             "unit_kerja" => $this->input->post('unit_kerja', true),
             "jabatan_id" => $this->input->post('jabatan', true),
-            "jabatan_fungsional" => $this->input->post('jabatan_fungsional', true),
+            "jabatan_fungsional_id" => $this->input->post('jabatan_fungsional', true),
             "alamat_rumah" => $this->input->post('alamat_rumah', true),
             "alamat_sekolah" => $this->input->post('alamat_sekolah', true),
             "email" => $this->input->post('email', true),

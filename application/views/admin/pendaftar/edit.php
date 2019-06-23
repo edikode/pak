@@ -121,11 +121,12 @@
                             <label for="jabatan_fungsional">Jabatan Fungsional</label>
                             <select name="jabatan_fungsional" class="form-control" id="jabatan_fungsional">
                                 <option value="">-- Pilih --</option>
+                                <?php $jabatan_fungsional = $this->db->get('jabatan_fungsional')->result(); ?>
                                 <?php foreach($jabatan_fungsional as $j) : ?>
-                                    <?php if($pendaftar->jabatan_fungsional == $j) : ?>
-                                        <option value="<?= $j ?>" selected><?= $j ?></option>
+                                    <?php if($pendaftar->jabatan_fungsional_id == $j->id) : ?>
+                                        <option value="<?= $j->id ?>" selected><?= $j->tugas; ?></option>
                                     <?php else : ?>
-                                        <option value="<?= $j ?>"><?= $j ?></option>
+                                        <option value="<?= $j->id ?>"><?= $j->tugas; ?></option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2019 at 05:44 AM
+-- Generation Time: Jun 23, 2019 at 02:30 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -34,23 +34,64 @@ CREATE TABLE `jabatan` (
   `pangkat` varchar(100) NOT NULL,
   `gol_ruang` varchar(50) NOT NULL,
   `komulatif_minimal` int(11) NOT NULL,
-  `perjenjang` int(11) NOT NULL
+  `perjenjang` int(11) NOT NULL,
+  `ak_pbtt` int(11) NOT NULL,
+  `akpkb` int(11) NOT NULL,
+  `akp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jabatan`
 --
 
-INSERT INTO `jabatan` (`id`, `nama`, `pangkat`, `gol_ruang`, `komulatif_minimal`, `perjenjang`) VALUES
-(1, 'Guru Pertama', 'Penata Muda', 'III/a', 100, 50),
-(2, 'Guru Pertama', 'Penata Muda Tingkat 1', 'III/b', 150, 50),
-(3, 'Guru Muda', 'Penata', 'III/c', 200, 100),
-(4, 'Guru Muda', 'Penata Tingkat 1', 'III/d', 300, 100),
-(5, 'Guru Madya', 'Pembina', 'IV/a', 400, 150),
-(6, 'Guru Madya', 'Pembina Tingkat 1', 'IV/b', 550, 150),
-(7, 'Guru Madya', 'Pembina Utama Muda', 'IV/c', 700, 150),
-(8, 'Guru Utama', 'Pembina Utama Madya', 'IV/d', 850, 200),
-(9, 'Guru Utama', 'Pembina Utama', 'IV/e', 1050, 0);
+INSERT INTO `jabatan` (`id`, `nama`, `pangkat`, `gol_ruang`, `komulatif_minimal`, `perjenjang`, `ak_pbtt`, `akpkb`, `akp`) VALUES
+(1, 'Guru Pertama', 'Penata Muda', 'III/a', 100, 50, 42, 3, 5),
+(2, 'Guru Pertama', 'Penata Muda Tingkat 1', 'III/b', 150, 50, 38, 7, 5),
+(3, 'Guru Muda', 'Penata', 'III/c', 200, 100, 81, 9, 10),
+(4, 'Guru Muda', 'Penata Tingkat 1', 'III/d', 300, 100, 78, 12, 10),
+(5, 'Guru Madya', 'Pembina', 'IV/a', 400, 150, 119, 16, 15),
+(6, 'Guru Madya', 'Pembina Tingkat 1', 'IV/b', 550, 150, 119, 16, 15),
+(7, 'Guru Madya', 'Pembina Utama Muda', 'IV/c', 700, 150, 116, 19, 15),
+(8, 'Guru Utama', 'Pembina Utama Madya', 'IV/d', 850, 200, 155, 25, 20),
+(9, 'Guru Utama', 'Pembina Utama', 'IV/e', 1050, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jabatan_fungsional`
+--
+
+CREATE TABLE `jabatan_fungsional` (
+  `id` int(11) NOT NULL,
+  `tugas` varchar(200) NOT NULL,
+  `jenis` varchar(100) NOT NULL,
+  `jml_kompetensi` int(11) NOT NULL,
+  `nilai_kompetensi_maks` int(11) NOT NULL,
+  `nilai_pk_maks` int(11) NOT NULL,
+  `keterangan` text NOT NULL,
+  `kegiatan_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `jabatan_fungsional`
+--
+
+INSERT INTO `jabatan_fungsional` (`id`, `tugas`, `jenis`, `jml_kompetensi`, `nilai_kompetensi_maks`, `nilai_pk_maks`, `keterangan`, `kegiatan_id`) VALUES
+(1, 'Kepala Sekolah', 'ttmj', 6, 4, 24, 'Tugas tambahan mengurangi jam', 7),
+(2, 'Wakil Kepala Sekolah', 'ttmj', 5, 4, 20, 'Tugas tambahan mengurangi jam', 8),
+(3, 'Ka. Program Keahlian', 'ttmj', 8, 4, 32, 'Tugas tambahan mengurangi jam', 9),
+(4, 'Ka. Perpustakaan', 'ttmj', 10, 4, 40, 'Tugas tambahan mengurangi jam', 10),
+(5, 'Ka. Lab/Bengkel/UP', 'ttmj', 7, 4, 28, 'Tugas tambahan mengurangi jam', 11),
+(6, 'Menjadi Pembimbing Khusus pada satuan pendidikan yang menyelenggarakan pendidikan inklusi, pendidikan terpadu', 'ttmj', 0, 0, 0, 'Tugas tambahan mengurangi jam (nilai tidak boleh kosong)', 12),
+(7, 'Wali Kelas', 'tttmj', 0, 0, 5, 'Tugas tambahan tidak mengurangi jam x 5%', 13),
+(8, 'Menyusun Kurikulum', 'tttmj', 0, 0, 5, 'Tugas tambahan tidak mengurangi jam x 5%', 14),
+(9, 'Membimbing Guru Pemula dalam Program diskusi', 'tttmj', 0, 0, 5, 'Tugas tambahan tidak mengurangi jam x 5%', 17),
+(10, 'Membimbing Siswa dalam kegiatan ekskul', 'tttmj', 0, 0, 5, 'Tugas tambahan tidak mengurangi jam x 5%', 18),
+(11, 'Menjadi Pengawas Penilaian dan evaluasi', 'pkdt', 0, 0, 2, 'Penugasan kurang dari 1 tahun x 2%', 15),
+(12, 'Pembimbing pada penyusunan publikasi ilmiah dan karya inovatif', 'pkdt', 0, 0, 2, 'Penugasan kurang dari 1 tahun x 2%', 19),
+(13, 'Pembimbing Pada kelas yang menjadi tanggung jawabnya (khusus guru kelas)', 'pkdt', 0, 0, 2, 'Penugasan kurang dari 1 tahun x 2%', 20),
+(14, 'Guru Mata Pelajaran / Guru kelas', 'pb', 14, 4, 56, 'Pembelajaran / bimbingan', 5),
+(15, 'Guru Bimbingan', 'pb', 17, 4, 68, 'Pembelajaran / bimbingan', 6);
 
 -- --------------------------------------------------------
 
@@ -88,10 +129,10 @@ INSERT INTO `kegiatan` (`id`, `kode`, `kegiatan`, `satuan`, `angka_kredit`, `pel
 (13, '13', 'Menjadi wali kelas', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
 (14, '14', 'Menyusun kurikulum pada satuan pendidikannya', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
 (15, '15', 'Menjadi pengawas penilaian dan evaluasi terhadap proses dan hasil belajar.', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
-(17, '16', 'Membimbing guru pemula dalam program induksi', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
-(18, '17', 'Membimbing siswa dalam kegiatan ekstrakurikuler', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
-(19, '18', 'Menjadi pembimbing pada penyusunan publikasi ilmiah dan karya inovatif', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
-(20, '19', 'Melaksanakan pembimbingan pada kelas yang menjadi tanggungjawabnya (khusus Guru Kelas)', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
+(17, '15a', 'Membimbing guru pemula dalam program induksi', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
+(18, '16', 'Membimbing siswa dalam kegiatan ekstrakurikuler', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
+(19, '17', 'Menjadi pembimbing pada penyusunan publikasi ilmiah dan karya inovatif', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
+(20, '18', 'Melaksanakan pembimbingan pada kelas yang menjadi tanggungjawabnya (khusus Guru Kelas)', 'Laporan Penilaian Kinerja', 0, 'Semua Jenjang', 5),
 (21, '20', 'Mengikuti diklat fungsional:  a. Lamanya lebih dari 960 jam', '1. Surat tugas 2. Laporan deskripsi hasil pel', 15, 'Semua Jenjang', 6),
 (22, '21', 'Mengikuti diklat fungsional: b. Lamanya antara 641 s.d 960 jam', '1. Surat tugas 2. Laporan deskripsi hasil pel', 9, 'Semua Jenjang', 6),
 (23, '22', 'Mengikuti diklat fungsional: c. Lamanya antara 481 s.d 640 jam', '1. Surat tugas 2. Laporan deskripsi hasil pel', 6, 'Semua Jenjang', 6),
@@ -165,9 +206,34 @@ CREATE TABLE `nilai` (
   `tanggal` int(11) DEFAULT NULL,
   `file` varchar(50) NOT NULL,
   `status` varchar(45) DEFAULT NULL,
+  `tahun` int(11) NOT NULL,
+  `jumlah_jam` int(11) NOT NULL,
+  `nilai` double NOT NULL,
+  `npk` double NOT NULL,
+  `jenis` varchar(10) NOT NULL,
+  `jabatan_fungsional_id` int(11) NOT NULL,
   `kegiatan_id` int(11) DEFAULT NULL,
   `rekap_nilai_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nilai`
+--
+
+INSERT INTO `nilai` (`id`, `tanggal`, `file`, `status`, `tahun`, `jumlah_jam`, `nilai`, `npk`, `jenis`, `jabatan_fungsional_id`, `kegiatan_id`, `rekap_nilai_id`) VALUES
+(53, 1561252284, 'kodeKegiatan-05-idRekapNilai-11.pdf', '1', 4, 6, 50, 29.75, 'pb', 14, 5, 11),
+(54, 1561252284, 'kodeKegiatan-07-idRekapNilai-11.pdf', '1', 4, 0, 20, 29.75, 'ttmj', 1, 7, 11),
+(55, 1561252284, 'kodeKegiatan-20-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 21, 11),
+(56, 1561252284, 'kodeKegiatan-21-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 22, 11),
+(57, 1561252285, 'kodeKegiatan-30-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 31, 11),
+(58, 1561252285, 'kodeKegiatan-31-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 32, 11),
+(59, 1561252285, 'kodeKegiatan-65-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 66, 11),
+(60, 1561252285, 'kodeKegiatan-68-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 69, 11),
+(61, 1561252285, 'kodeKegiatan-69-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 70, 11),
+(65, 1561254408, 'kodeKegiatan-06-idRekapNilai-13.pdf', '1', 4, 75, 63, 25.3125, 'pb', 15, 6, 13),
+(66, 1561254408, 'kodeKegiatan-08-idRekapNilai-13.pdf', '1', 4, 0, 18, 20.25, 'ttmj', 2, 8, 13),
+(67, 1561254408, 'kodeKegiatan-13-idRekapNilai-13.pdf', '1', 0, 0, 0, 1.265625, 'tttmj', 7, 13, 13),
+(68, 1561254408, 'kodeKegiatan-18-idRekapNilai-13.pdf', '1', 0, 0, 0, 0.50625, 'pkdt', 13, 20, 13);
 
 -- --------------------------------------------------------
 
@@ -216,10 +282,10 @@ CREATE TABLE `pendaftar` (
   `jenis_kelamin` varchar(45) DEFAULT NULL,
   `agama` varchar(45) DEFAULT NULL,
   `status_guru` varchar(45) DEFAULT NULL,
-  `tugas_mengajar` varchar(45) DEFAULT NULL,
   `unit_kerja` varchar(45) DEFAULT NULL,
   `jabatan_id` int(11) NOT NULL,
-  `jabatan_fungsional` varchar(45) DEFAULT NULL,
+  `tugas_mengajar` varchar(45) DEFAULT NULL,
+  `jabatan_fungsional_id` int(11) NOT NULL,
   `alamat_rumah` text,
   `alamat_sekolah` text,
   `gambar` varchar(45) DEFAULT NULL,
@@ -229,6 +295,14 @@ CREATE TABLE `pendaftar` (
   `date_created` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `pendaftar`
+--
+
+INSERT INTO `pendaftar` (`id`, `nama`, `nip`, `nuptk`, `karpeg`, `tmp_lahir`, `tgl_lahir`, `jenis_kelamin`, `agama`, `status_guru`, `unit_kerja`, `jabatan_id`, `tugas_mengajar`, `jabatan_fungsional_id`, `alamat_rumah`, `alamat_sekolah`, `gambar`, `email`, `telepon`, `is_active`, `date_created`) VALUES
+(1, 'Siti Guru', '12345', '12345', '12345', 'Banyuwangi', '1999-12-12', 'P', 'Islam', 'PNS', 'SD 2 Purwoharjo', 3, 'Guru Mata Pelajaran Matematika', 3, 'Purwoharjo', 'Purwoharjo', 'avatar.jpg', 'sitiguru@mail.com', '08123456789', 1, 1556329845),
+(2, 'User baru', '123456', '123456', '123456', 'Banyuwangi', '1997-12-12', 'L', 'Islam', 'PNS', 'SD 2 Purwoharjo', 5, 'Mengajar Mata Pelajaran Bahasa Indonesia', 2, 'Purwoharjo', 'Purwoharjo', 'avatar.jpg', 'userbaru@mail.com', '0812345678', 1, 1556330178);
+
 -- --------------------------------------------------------
 
 --
@@ -237,15 +311,23 @@ CREATE TABLE `pendaftar` (
 
 CREATE TABLE `rekap_nilai` (
   `id` int(11) NOT NULL,
-  `nilai_total` double DEFAULT NULL,
   `lengkap` int(1) NOT NULL,
   `status` varchar(45) DEFAULT NULL,
   `tanggal` int(11) DEFAULT NULL,
   `dari` int(11) NOT NULL,
   `ke` int(11) NOT NULL,
   `pengajuan_ke` int(11) DEFAULT NULL,
+  `hasil_akk` double NOT NULL,
   `pendaftar_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rekap_nilai`
+--
+
+INSERT INTO `rekap_nilai` (`id`, `lengkap`, `status`, `tanggal`, `dari`, `ke`, `pengajuan_ke`, `hasil_akk`, `pendaftar_id`) VALUES
+(11, 1, '1', 1561252284, 5, 6, 1, 158.65, 2),
+(13, 1, '3', 1561254408, 3, 4, 1, 92.896875, 1);
 
 -- --------------------------------------------------------
 
@@ -322,7 +404,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `pendaftar_id`, `pegawai_id`, `username`, `password`, `role_id`, `is_active`, `gambar`, `date_created`) VALUES
 (1, NULL, 1, 'sitiadmin', '$2y$10$WKw3jo4OKTuzTHTHzAhrle0fkec73YN5wG7/5UiZN4iWCnXPmn.Bm', 1, 1, 'avatar.jpg', 1552637403),
-(4, NULL, 2, 'sitipenilai', '$2y$10$wUsoGmkil.VgUqR7HFVr/uoZRg1Wo50I0YpZ2DO7Lb5WtbImHhbPS', 3, 1, 'avatar.jpg', 1553427430);
+(4, NULL, 2, 'sitipenilai', '$2y$10$wUsoGmkil.VgUqR7HFVr/uoZRg1Wo50I0YpZ2DO7Lb5WtbImHhbPS', 3, 1, 'avatar.jpg', 1553427430),
+(5, 1, NULL, 'sitiguru', '$2y$10$/lR8vMmvC6wilATL73WekOefoDJgsGbTvRTMExtLkd/C6wjlA9Qva', 4, 1, 'avatar.jpg', 1556073396),
+(6, 2, NULL, 'userbaru', '$2y$10$46oUPk1VxiqcRI7cEA8hsewMekwHBWF/c3hoInK2JB3775t.O7LEq', 4, 1, 'avatar.jpg', 1556330179);
 
 --
 -- Indexes for dumped tables
@@ -332,6 +416,12 @@ INSERT INTO `user` (`id`, `pendaftar_id`, `pegawai_id`, `username`, `password`, 
 -- Indexes for table `jabatan`
 --
 ALTER TABLE `jabatan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `jabatan_fungsional`
+--
+ALTER TABLE `jabatan_fungsional`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -394,6 +484,12 @@ ALTER TABLE `jabatan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `jabatan_fungsional`
+--
+ALTER TABLE `jabatan_fungsional`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `kegiatan`
 --
 ALTER TABLE `kegiatan`
@@ -403,7 +499,7 @@ ALTER TABLE `kegiatan`
 -- AUTO_INCREMENT for table `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `pegawai`
@@ -415,13 +511,13 @@ ALTER TABLE `pegawai`
 -- AUTO_INCREMENT for table `pendaftar`
 --
 ALTER TABLE `pendaftar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rekap_nilai`
 --
 ALTER TABLE `rekap_nilai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -439,7 +535,7 @@ ALTER TABLE `unsur`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

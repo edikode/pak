@@ -1,3 +1,5 @@
+
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -35,11 +37,233 @@
                     </td>
                 </tr>
 
-                <?php
-                $user = $this->db->get_where('user',['username' => $this->session->userdata('username')])->row();
+                <?php foreach($kegiatan as $k):
+                   
+                $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['kegiatan_id' => $k->kegiatan_id])->row();
+               
 
-                foreach($kegiatan as $k):  ?>
+                if($jabatan_fungsional){ ?>
+                <!-- Ini untuk PEMBELAJARAN/ BIMBINGAN DAN TUGAS TERTENTU -->
+                <tr>
+                    <td><?= $k->unsur; ?></td>
+                    <td><?= $k->sub_unsur; ?></td>
+                    <td><?= $k->kegiatan; ?></td>
+                    <td><a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary">Lihat Berkas</a></td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" href="#" data-toggle="modal" data-target="#nilai<?= $jabatan_fungsional->jenis; ?>">Nilai</a>
+                    </td>
+
+                </tr>
+
+                <?php $nilai = $this->db->get_where('nilai',['id' => $k->nilai_id])->row(); ?>
                 
+                <?php if($jabatan_fungsional->jenis == "pb") : ?>
+                <!-- modal Unsur pembelajaran / BK -->
+                <div class="modal fade" id="nilaipb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <form action="<?= base_url('penilai/pak/validasinilai/'.$nilai->rekap_nilai_id.'/'.$nilai->id); ?>" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Nilai Unsur pembelajaran / BK</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="status">Validasi Berkas</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="valid" value="1" <?php if($nilai->status == 1){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="valid">
+                                        Valid
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="tidak_valid" value="2" <?php if($nilai->status == 2){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="tidak_valid">
+                                        Tidak Valid
+                                    </label>
+                                    <?= form_error('status','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <br>
+                                <?php $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['id' => $nilai->jabatan_fungsional_id])->row(); ?>
+
+                                <div class="form-group">
+                                    <label for="tugas_tambahan">Tugas</label>
+                                    <input type="text" class="form-control" id="tugas_tambahan" placeholder="Jumlah Jam/Siswa" name="tugas_tambahan" autocomplete="off" value="<?= $jabatan_fungsional->tugas ?>" required readonly="">
+                                    <?= form_error('tugas_tambahan','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jumlah_jam">Jumlah Jam/Siswa untuk Pembelajaran atau bimbingan</label>
+                                    <input type="text" class="form-control" id="jumlah_jam" placeholder="Jumlah Jam/Siswa" name="jumlah_jam" autocomplete="off" value="<?php if($nilai->jumlah_jam == 0) echo ""; else { echo set_value('jumlah_jam') ? set_value('jumlah_jam') : $nilai->jumlah_jam; } ?>" required>
+                                    <?= form_error('jumlah_jam','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tahun">Jumlah Tahun Mengajar/Membimbing</label>
+                                    <input type="text" class="form-control" id="tahun" placeholder="Jumlah Tahun Mengajar/Membimbing" name="tahun" autocomplete="off" value="<?php if($nilai->tahun == 0) echo ""; else { echo set_value('tahun') ? set_value('tahun') : $nilai->tahun; } ?>" required>
+                                    <?= form_error('tahun','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nilai">Total Nilai PKG</label>
+                                    <input type="text" class="form-control" id="nilai" placeholder="Total Nilai PKG" name="nilai" autocomplete="off" value="<?php if($nilai->nilai == 0) echo ""; else { echo set_value('nilai') ? set_value('nilai') : $nilai->nilai; } ?>" required>
+                                    <?= form_error('nilai','<small class="text-danger">','</small>'); ?>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                <?php elseif($jabatan_fungsional->jenis == "ttmj") : ?>
+                <!-- modal Tugas tambahan mengurangi jam -->
+                <div class="modal fade" id="nilaittmj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <form action="<?= base_url('penilai/pak/validasinilai/'.$nilai->rekap_nilai_id.'/'.$nilai->id); ?>" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Nilai Tugas Tambahan Mengurangi Jam</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="status">Validasi Berkas</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="valid" value="1" <?php if($nilai->status == 1){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="valid">
+                                        Valid
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="tidak_valid" value="2" <?php if($nilai->status == 2){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="tidak_valid">
+                                        Tidak Valid
+                                    </label>
+                                    <?= form_error('status','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <br>
+                                <?php $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['id' => $nilai->jabatan_fungsional_id])->row(); ?>
+
+                                <div class="form-group">
+                                    <label for="tugas_tambahan">Tugas Tambahan</label>
+                                    <input type="text" class="form-control" id="tugas_tambahan" placeholder="Jumlah Jam/Siswa" name="tugas_tambahan" autocomplete="off" value="<?= $jabatan_fungsional->tugas ?>" required readonly="">
+                                    <?= form_error('tugas_tambahan','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tahun">Jumlah Tahun Bertugas</label>
+                                    <input type="text" class="form-control" id="tahun" placeholder="Jumlah Tahun Bertugas" name="tahun" autocomplete="off" value="<?php if($nilai->tahun == 0) echo ""; else { echo set_value('tahun') ? set_value('tahun') : $nilai->tahun; } ?>" required>
+                                    <?= form_error('tahun','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nilai">Total Nilai PKG</label>
+                                    <input type="text" class="form-control" id="nilai" placeholder="Total Nilai PKG" name="nilai" autocomplete="off" value="<?php if($nilai->nilai == 0) echo ""; else { echo set_value('nilai') ? set_value('nilai') : $nilai->nilai; } ?>" required>
+                                    <?= form_error('nilai','<small class="text-danger">','</small>'); ?>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <?php elseif($jabatan_fungsional->jenis == "tttmj") : ?>
+                <!-- modal Tugas tambahan mengurangi jam -->
+                <div class="modal fade" id="nilaitttmj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <form action="<?= base_url('penilai/pak/validasinilai/'.$nilai->rekap_nilai_id.'/'.$nilai->id); ?>" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Nilai Penugasan 1 Tahun</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="status">Validasi Berkas</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="valid" value="1" <?php if($nilai->status == 1){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="valid">
+                                        Valid
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="tidak_valid" value="2" <?php if($nilai->status == 2){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="tidak_valid">
+                                        Tidak Valid
+                                    </label>
+                                    <?= form_error('status','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <br>
+                                <?php $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['id' => $nilai->jabatan_fungsional_id])->row(); ?>
+
+                                <div class="form-group">
+                                    <label for="tugas_tambahan">Penugasan 1 Tahun</label>
+                                    <input type="text" class="form-control" id="tugas_tambahan" placeholder="Jumlah Jam/Siswa" name="tugas_tambahan" autocomplete="off" value="<?= $jabatan_fungsional->tugas ?>" required readonly="">
+                                    <?= form_error('tugas_tambahan','<small class="text-danger">','</small>'); ?>
+                                </div>
+                            <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+
+                <?php elseif($jabatan_fungsional->jenis == "pkdt") : ?>
+                <!-- modal Tugas tambahan mengurangi jam -->
+                <div class="modal fade" id="nilaipkdt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <form action="<?= base_url('penilai/pak/validasinilai/'.$nilai->rekap_nilai_id.'/'.$nilai->id); ?>" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Nilai Penugasan Kurang dari 1 Tahun</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="status">Validasi Berkas</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="valid" value="1" <?php if($nilai->status == 1){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="valid">
+                                        Valid
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" id="tidak_valid" value="2" <?php if($nilai->status == 2){ echo "checked"; }?> required>
+                                    <label class="form-check-label" for="tidak_valid">
+                                        Tidak Valid
+                                    </label>
+                                    <?= form_error('status','<small class="text-danger">','</small>'); ?>
+                                </div>
+                                <br>
+                                <?php $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['id' => $nilai->jabatan_fungsional_id])->row(); ?>
+
+                                <div class="form-group">
+                                    <label for="tugas_tambahan">Penugasan Kurang dari 1 Tahun</label>
+                                    <input type="text" class="form-control" id="tugas_tambahan" placeholder="Jumlah Jam/Siswa" name="tugas_tambahan" autocomplete="off" value="<?= $jabatan_fungsional->tugas ?>" required readonly="">
+                                    <?= form_error('tugas_tambahan','<small class="text-danger">','</small>'); ?>
+                                </div>
+                            <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                <?php endif; ?>
+
+
+                <?php } else { ?>
+
+                <!-- Ini selain PEMBELAJARAN/ BIMBINGAN DAN TUGAS TERTENTU -->
                 <tr>
                     <td><?= $k->unsur; ?></td>
                     <td><?= $k->sub_unsur; ?></td>
@@ -48,13 +272,13 @@
                     <td>
                         <form action="" method="post" multipart>
                             <div class="form-check">
-                                <input class="form-check-input cek-validasi" type="radio" name="<?= $k->id ?>" id="<?= $k->kegiatan ?>valid" value="1" data-id="<?= $k->id; ?>" data-validasi="1" data-rekapid="<?= $k->rekap_nilai_id; ?>" <?php if($k->status == 1){ echo "checked"; }?>>
+                                <input class="form-check-input cek-validasi" type="radio" name="<?= $k->nilai_id ?>" id="<?= $k->kegiatan ?>valid" value="1" data-id="<?= $k->nilai_id; ?>" data-validasi="1" data-rekapid="<?= $k->rekap_nilai_id; ?>" <?php if($k->status == 1){ echo "checked"; }?>>
                                 <label class="form-check-label" for="<?= $k->kegiatan ?>valid">
                                     Valid
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input cek-validasi" type="radio" name="<?= $k->id ?>" id="<?= $k->kegiatan ?>tidak" value="2" data-id="<?= $k->id; ?>" data-validasi="2" data-rekapid="<?= $k->rekap_nilai_id; ?>" <?php if($k->status == 2){ echo "checked"; }?>>
+                                <input class="form-check-input cek-validasi" type="radio" name="<?= $k->nilai_id ?>" id="<?= $k->kegiatan ?>tidak" value="2" data-id="<?= $k->nilai_id; ?>" data-validasi="2" data-rekapid="<?= $k->rekap_nilai_id; ?>" <?php if($k->status == 2){ echo "checked"; }?>>
                                 <label class="form-check-label" for="<?= $k->kegiatan ?>tidak">
                                     Tidak Valid
                                 </label>
@@ -62,15 +286,19 @@
                         </form>
                     </td>
 
-                </tr>
-                <?php endforeach; ?>
+                </tr> 
+                
+                <?php
+                } endforeach; ?>
             </tbody>
         </table>
 
         <form action="<?= base_url('penilai/pak/ceksemuavalidasi/'.$k->rekap_nilai_id); ?>" method="post">
-            <button type="submit" name="simpan" class="btn btn-primary">Save</button>
-            <a href="<?= base_url('penilai/pak') ?>" class="btn btn-secondary">Kembali</a>
+            <button type="submit" name="simpan" class="btn btn-primary">Berikutnya</button>
+            <a href="<?= base_url('penilai/pak/validasi/'.$k->rekap_nilai_id) ?>" class="btn btn-secondary">Kembali</a>
         </form>
+
+        <br><br>
     
 
 </div>

@@ -46,17 +46,8 @@
                         <td><?= $r->nama; ?></td>
                         <td align="center"><?= $r->pengajuan_ke; ?></td>
                         <td><?= date('d-m-Y',$r->tanggal) ?></td>
-                        <td><?php 
-                            $nilaiTotal = $queryKegiatan = "SELECT SUM(`kegiatan`.`angka_kredit`) as `nilai`
-                                FROM `kegiatan` 
-                                JOIN `nilai`
-                                ON `kegiatan`.`id` = `nilai`.`kegiatan_id`
-                                WHERE `nilai`.`rekap_nilai_id` = $r->id AND `status` = 1
-                                ";
-                            $nilai = $this->db->query($nilaiTotal)->row();
-                            echo $nilai->nilai;
-                        ?></td>
-                        <td><?php if($r->status == 0){ echo "<span class='badge badge-danger'>Belum divalidasi</span>"; } elseif($r->status == 1) { echo "<span class='badge badge-success'>Data valid semua</span>"; } else { echo "<span class='badge badge-warning'>Data ada yg belum valid</span>"; } ?></td>
+                        <td><?= $r->hasil_akk ?></td>
+                        <td><?php if($r->status == 0){ echo "<span class='badge badge-danger'>Belum divalidasi</span>"; } elseif($r->status == 1) { echo "<span class='badge badge-success'>Data valid semua</span>"; }  elseif($r->status == 3) { echo "<span class='badge badge-danger'>Data Pengajuan Ditolak</span>"; } else { echo "<span class='badge badge-warning'>Data ada yg belum valid</span>"; } ?></td>
                         <td><?= $r->alamat_sekolah; ?></td>
                         <td>
                             <a href="<?= base_url('penilai/pak/hapus/'.$r->id) ?>" onclick="return confirm('Hapus?');" class="badge badge-danger float-right tombol-hapus mb-1">Hapus</a>

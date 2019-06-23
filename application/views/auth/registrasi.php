@@ -148,10 +148,10 @@
                         <select name="jabatan_fungsional" class="form-control" id="jabatan_fungsional">
                             <option value="">-- Pilih --</option>
                             <?php foreach($jabatan_fungsional as $j) : ?>
-                                <?php if(set_value('jabatan_fungsional') == $j) : ?>
-                                    <option value="<?= $j ?>" selected><?= $j ?></option>
+                                <?php if(set_value('jabatan_fungsional') == $j->id) : ?>
+                                    <option value="<?= $j->id ?>" selected><?= $j->tugas ?></option>
                                 <?php else : ?>
-                                    <option value="<?= $j ?>"><?= $j ?></option>
+                                    <option value="<?= $j->id ?>"><?= $j->tugas ?></option>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
