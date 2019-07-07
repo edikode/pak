@@ -35,13 +35,24 @@
 
                     if($unsur->num_rows() > 1): ?>
                         <td>
-                            <?php foreach($dataUnsur as $d): ?>
+                            <?php foreach($dataUnsur as $d): 
+                                if($d->unsur_id == 1) : ?>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="kegiatan_id[]" id="<?= $d->kegiatan ?>" value="<?= $d->id ?>">
+                                    <label class="form-check-label" for="<?= $d->kegiatan ?>">
+                                        <?= $d->kegiatan ?>
+                                    </label>
+                                </div>
+                                
+                                <?php else : ?>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="kegiatan_id[]" id="<?= $d->kegiatan ?>" value="<?= $d->id ?>">
                                     <label class="form-check-label" for="<?= $d->kegiatan ?>">
                                         <?= $d->kegiatan ?>
                                     </label>
                                 </div>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
                     <?php else : ?>

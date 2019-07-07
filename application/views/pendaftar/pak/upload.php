@@ -36,7 +36,7 @@
                     <td>Unsur</td>
                     <td>Sub Unsur Penilaian</td>
                     <td>Butir Kegiatan</td>
-                    <td>Upload Berkas</td>
+                    <td style="width:250px">Upload Berkas</td>
                 </tr>
             </thead>
             <tbody>
@@ -63,6 +63,8 @@
                         <?php if($k->file == "") : ?>
                         <form name="form1" id="form1" method="post" action="" enctype="multipart/form-data">        
                             <input type="hidden" name="nilai_id" value="<?= $k->id ?>">
+
+                            <input type="text" placeholder="Tulis Judul berkas ..." name="judul" value="<?= $k->judul ?>" class="form-control mb-2" required>
                             <input type="file" class="gambar" name="file" data-id="<?= $k->id ?>">
                             
                             <!-- <button type="submit" name="simpan">Upload</button> -->
@@ -74,11 +76,13 @@
 
                             <form name="form1" id="form1" method="post" action="" enctype="multipart/form-data">        
                                 <input type="hidden" name="nilai_id" value="<?= $k->id ?>">
+                                
+                                <input type="text" placeholder="Tulis Judul berkas ..." name="judul" value="<?= $k->judul ?>" class="form-control mb-2" required>
                                 <input type="file" class="gambar" name="file" data-id="<?= $k->id ?>">
                             </form>
 
                             <?php else : ?>
-
+                            <div class="mb-2">Judul Berkas: <?= $k->judul ?></div>
                             <a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary">Lihat Berkas</a>
 
                             <?php endif ?>

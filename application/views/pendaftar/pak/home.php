@@ -95,6 +95,7 @@
                         <br><br>
 
                         <a href="<?= base_url('pendaftar/pak/upload/'.$rekapnilai->id); ?>" class="btn btn-primary">Cek Berkas</a>
+                        <a href="<?= base_url('pendaftar/pak/cetaklaporan/'.$rekapnilai->id); ?>"  target="_blank" class="btn btn-success">Cetak Laporan Hasil</a>
                     </div>
                 </div>
             <?php endforeach;  ?>
@@ -137,6 +138,8 @@
                         <strong>Nilai Anda</strong><br>
                         ANGKA KREDIT KESELURUHAN = <?= $rekapnilai->hasil_akk ?>
                         <br><br>
+
+                        <a href="<?= base_url('pendaftar/pak/cetaklaporan/'.$rekapnilai->id); ?>" class="btn btn-success" target="_blank">Cetak Laporan Hasil</a>
                     </div>
                 </div>
             <?php endforeach;  ?>
@@ -180,7 +183,7 @@
                         ANGKA KREDIT KESELURUHAN = <?= $rekapnilai->hasil_akk ?>
                         <br><br>
 
-                        <!-- <a href="<?= base_url('pendaftar/pak/upload/'.$rekapnilai->id); ?>" class="btn btn-primary">Cek Berkas</a> -->
+                        <a href="<?= base_url('pendaftar/pak/cetaklaporan/'.$rekapnilai->id); ?>" class="btn btn-success" target="_blank">Cetak Laporan Hasil</a>
                     </div>
                 </div>
             <?php endforeach;  ?>

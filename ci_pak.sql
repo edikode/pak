@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 23, 2019 at 02:30 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- Host: localhost
+-- Generation Time: Jul 06, 2019 at 06:18 AM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ci_pak2`
+-- Database: `ci_pak`
 --
 
 -- --------------------------------------------------------
@@ -211,6 +211,9 @@ CREATE TABLE `nilai` (
   `nilai` double NOT NULL,
   `npk` double NOT NULL,
   `jenis` varchar(10) NOT NULL,
+  `judul` text NOT NULL,
+  `alasan` text NOT NULL,
+  `saran` text NOT NULL,
   `jabatan_fungsional_id` int(11) NOT NULL,
   `kegiatan_id` int(11) DEFAULT NULL,
   `rekap_nilai_id` int(11) DEFAULT NULL
@@ -220,20 +223,24 @@ CREATE TABLE `nilai` (
 -- Dumping data for table `nilai`
 --
 
-INSERT INTO `nilai` (`id`, `tanggal`, `file`, `status`, `tahun`, `jumlah_jam`, `nilai`, `npk`, `jenis`, `jabatan_fungsional_id`, `kegiatan_id`, `rekap_nilai_id`) VALUES
-(53, 1561252284, 'kodeKegiatan-05-idRekapNilai-11.pdf', '1', 4, 6, 50, 29.75, 'pb', 14, 5, 11),
-(54, 1561252284, 'kodeKegiatan-07-idRekapNilai-11.pdf', '1', 4, 0, 20, 29.75, 'ttmj', 1, 7, 11),
-(55, 1561252284, 'kodeKegiatan-20-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 21, 11),
-(56, 1561252284, 'kodeKegiatan-21-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 22, 11),
-(57, 1561252285, 'kodeKegiatan-30-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 31, 11),
-(58, 1561252285, 'kodeKegiatan-31-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 32, 11),
-(59, 1561252285, 'kodeKegiatan-65-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 66, 11),
-(60, 1561252285, 'kodeKegiatan-68-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 69, 11),
-(61, 1561252285, 'kodeKegiatan-69-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', 0, 70, 11),
-(65, 1561254408, 'kodeKegiatan-06-idRekapNilai-13.pdf', '1', 4, 75, 63, 25.3125, 'pb', 15, 6, 13),
-(66, 1561254408, 'kodeKegiatan-08-idRekapNilai-13.pdf', '1', 4, 0, 18, 20.25, 'ttmj', 2, 8, 13),
-(67, 1561254408, 'kodeKegiatan-13-idRekapNilai-13.pdf', '1', 0, 0, 0, 1.265625, 'tttmj', 7, 13, 13),
-(68, 1561254408, 'kodeKegiatan-18-idRekapNilai-13.pdf', '1', 0, 0, 0, 0.50625, 'pkdt', 13, 20, 13);
+INSERT INTO `nilai` (`id`, `tanggal`, `file`, `status`, `tahun`, `jumlah_jam`, `nilai`, `npk`, `jenis`, `judul`, `alasan`, `saran`, `jabatan_fungsional_id`, `kegiatan_id`, `rekap_nilai_id`) VALUES
+(53, 1561252284, 'kodeKegiatan-05-idRekapNilai-11.pdf', '1', 4, 6, 50, 29.75, 'pb', '', '', '', 14, 5, 11),
+(54, 1561252284, 'kodeKegiatan-07-idRekapNilai-11.pdf', '1', 4, 0, 20, 29.75, 'ttmj', '', '', '', 1, 7, 11),
+(55, 1561252284, 'kodeKegiatan-20-idRekapNilai-11.jpeg', '0', 0, 0, 0, 0, '', 'adadadad', '', '', 0, 21, 11),
+(56, 1561252284, 'kodeKegiatan-21-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', '', '', '', 0, 22, 11),
+(57, 1561252285, 'kodeKegiatan-30-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', '', '', '', 0, 31, 11),
+(58, 1561252285, 'kodeKegiatan-31-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', '', '', '', 0, 32, 11),
+(59, 1561252285, 'kodeKegiatan-65-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', '', '', '', 0, 66, 11),
+(60, 1561252285, 'kodeKegiatan-68-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', '', '', '', 0, 69, 11),
+(61, 1561252285, 'kodeKegiatan-69-idRekapNilai-11.pdf', '1', 0, 0, 0, 0, '', '', '', '', 0, 70, 11),
+(65, 1561254408, 'kodeKegiatan-06-idRekapNilai-13.pdf', '1', 4, 75, 63, 25.3125, 'pb', '', '', '', 15, 6, 13),
+(66, 1561254408, 'kodeKegiatan-08-idRekapNilai-13.pdf', '1', 4, 0, 18, 20.25, 'ttmj', '', '', '', 2, 8, 13),
+(67, 1561254408, 'kodeKegiatan-13-idRekapNilai-13.pdf', '1', 0, 0, 0, 1.265625, 'tttmj', '', '', '', 7, 13, 13),
+(68, 1561254408, 'kodeKegiatan-18-idRekapNilai-13.pdf', '1', 0, 0, 0, 0.50625, 'pkdt', '', '', '', 13, 20, 13),
+(69, 1562367946, 'kodeKegiatan-30-idRekapNilai-14.jpeg', '1', 0, 0, 0, 0, '', 'Nilai kegiatan rekap nilai id 14', 'asdasdsa eadsfs sgfgd dfgdhdfh', 'asdasdsa eadsfs sgfgd dfgdhdfh', 0, 31, 14),
+(70, 1562367946, 'kodeKegiatan-32-idRekapNilai-14.jpeg', '1', 0, 0, 0, 0, '', 'Nilai kegiatan rekap nilai id 14', 'asdasdsa eadsfs sgfgd dfgdhdfh', 'asdasdsa eadsfs sgfgd dfgdhdfh', 0, 33, 14),
+(71, 1562367946, 'kodeKegiatan-77-idRekapNilai-14.jpeg', '1', 0, 0, 0, 0, '', 'Nilai kegiatan rekap nilai id 14', 'asdasdsa eadsfs sgfgd dfgdhdfh', 'asdasdsa eadsfs sgfgd dfgdhdfh', 0, 78, 14),
+(72, 1562367946, 'kodeKegiatan-78-idRekapNilai-14.jpeg', '1', 0, 0, 0, 0, '', 'Nilai kegiatan rekap nilai id 14', 'asdasdsa eadsfs sgfgd dfgdhdfh', 'asdasdsa eadsfs sgfgd dfgdhdfh', 0, 79, 14);
 
 -- --------------------------------------------------------
 
@@ -251,7 +258,7 @@ CREATE TABLE `pegawai` (
   `status` varchar(45) DEFAULT NULL,
   `agama` varchar(45) DEFAULT NULL,
   `telepon` varchar(45) DEFAULT NULL,
-  `alamat` text,
+  `alamat` text DEFAULT NULL,
   `gambar` varchar(45) DEFAULT NULL,
   `jabatan` varchar(45) DEFAULT NULL,
   `is_active` int(1) DEFAULT NULL
@@ -263,7 +270,8 @@ CREATE TABLE `pegawai` (
 
 INSERT INTO `pegawai` (`id`, `nip`, `nama`, `tmp_lahir`, `tgl_lahir`, `jenis_kelamin`, `status`, `agama`, `telepon`, `alamat`, `gambar`, `jabatan`, `is_active`) VALUES
 (1, '12345', 'Siti Admin', 'Banyuwangi', '1997-12-12', 'P', 'BK', 'Islam', '081123456789', 'Purwoharjo - Banyuwangi', NULL, 'Kepala Dinas', NULL),
-(2, '12344', 'Siti Penilai', 'Banyuwangi', '1997-12-12', 'P', 'BK', 'Islam', '08112345678', 'Purwoharjo - Banyuwangi', NULL, 'Sekertaris', NULL);
+(2, '12344', 'Siti Penilai', 'Banyuwangi', '1997-12-12', 'P', 'BK', 'Islam', '08112345678', 'Purwoharjo - Banyuwangi', NULL, 'Sekertaris', NULL),
+(3, '12344', 'Kepala dinas', 'Banyuwangi', '1997-12-12', 'P', 'BK', 'Islam', '08112345678', 'Purwoharjo - Banyuwangi', NULL, 'Kepala dinas', 1);
 
 -- --------------------------------------------------------
 
@@ -286,8 +294,8 @@ CREATE TABLE `pendaftar` (
   `jabatan_id` int(11) NOT NULL,
   `tugas_mengajar` varchar(45) DEFAULT NULL,
   `jabatan_fungsional_id` int(11) NOT NULL,
-  `alamat_rumah` text,
-  `alamat_sekolah` text,
+  `alamat_rumah` text DEFAULT NULL,
+  `alamat_sekolah` text DEFAULT NULL,
   `gambar` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `telepon` varchar(45) DEFAULT NULL,
@@ -326,8 +334,9 @@ CREATE TABLE `rekap_nilai` (
 --
 
 INSERT INTO `rekap_nilai` (`id`, `lengkap`, `status`, `tanggal`, `dari`, `ke`, `pengajuan_ke`, `hasil_akk`, `pendaftar_id`) VALUES
-(11, 1, '1', 1561252284, 5, 6, 1, 158.65, 2),
-(13, 1, '3', 1561254408, 3, 4, 1, 92.896875, 1);
+(11, 1, '0', 1561252284, 5, 6, 1, 158.65, 2),
+(13, 1, '3', 1561254408, 3, 4, 1, 92.896875, 1),
+(14, 1, '3', 1562367946, 5, 6, 2, 9.2, 2);
 
 -- --------------------------------------------------------
 
@@ -406,7 +415,8 @@ INSERT INTO `user` (`id`, `pendaftar_id`, `pegawai_id`, `username`, `password`, 
 (1, NULL, 1, 'sitiadmin', '$2y$10$WKw3jo4OKTuzTHTHzAhrle0fkec73YN5wG7/5UiZN4iWCnXPmn.Bm', 1, 1, 'avatar.jpg', 1552637403),
 (4, NULL, 2, 'sitipenilai', '$2y$10$wUsoGmkil.VgUqR7HFVr/uoZRg1Wo50I0YpZ2DO7Lb5WtbImHhbPS', 3, 1, 'avatar.jpg', 1553427430),
 (5, 1, NULL, 'sitiguru', '$2y$10$/lR8vMmvC6wilATL73WekOefoDJgsGbTvRTMExtLkd/C6wjlA9Qva', 4, 1, 'avatar.jpg', 1556073396),
-(6, 2, NULL, 'userbaru', '$2y$10$46oUPk1VxiqcRI7cEA8hsewMekwHBWF/c3hoInK2JB3775t.O7LEq', 4, 1, 'avatar.jpg', 1556330179);
+(6, 2, NULL, 'userbaru', '$2y$10$46oUPk1VxiqcRI7cEA8hsewMekwHBWF/c3hoInK2JB3775t.O7LEq', 4, 1, 'avatar.jpg', 1556330179),
+(7, NULL, 3, 'kepaladinas', '$2y$10$WKw3jo4OKTuzTHTHzAhrle0fkec73YN5wG7/5UiZN4iWCnXPmn.Bm', 2, 1, 'avatar.jpg', 1552637403);
 
 --
 -- Indexes for dumped tables
@@ -499,13 +509,13 @@ ALTER TABLE `kegiatan`
 -- AUTO_INCREMENT for table `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `pegawai`
 --
 ALTER TABLE `pegawai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pendaftar`
@@ -517,7 +527,7 @@ ALTER TABLE `pendaftar`
 -- AUTO_INCREMENT for table `rekap_nilai`
 --
 ALTER TABLE `rekap_nilai`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -535,7 +545,7 @@ ALTER TABLE `unsur`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

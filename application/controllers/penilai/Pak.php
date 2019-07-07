@@ -33,7 +33,8 @@ class Pak extends CI_Controller {
     {
         // harus otomatis sesuai data terakhir yg belum divalidasi
         $rekap_nilai_id = $id;
-        $queryKegiatan = "SELECT `kegiatan`.`id` as kegiatan_id, `nilai`.`id` as nilai_id, `nilai`.`status`, `kegiatan`.`unsur_id`, `kegiatan`.`kode`, 
+        $queryKegiatan = "SELECT `kegiatan`.`id` as kegiatan_id, `nilai`.`id` as nilai_id, `nilai`.`status`,
+                        `nilai`.`alasan`, `nilai`.`saran`, `kegiatan`.`unsur_id`, `kegiatan`.`kode`, 
                         `kegiatan`.`kegiatan`, `kegiatan`.`satuan`, 
                         `kegiatan`.`angka_kredit`, `kegiatan`.`pelaksana`,
                         `unsur`.`unsur`, `unsur`.`sub_unsur`, 
@@ -52,17 +53,22 @@ class Pak extends CI_Controller {
         $this->load->view('template/index', $data);
     }
 
-    public function lakukanvalidasi()
+    public function lakukanvalidasi($id)
     {
-        $status = $this->input->post('dataValidasi', true);
-        $nilai_id = $this->input->post('dataId', true);
+        $rekap_nilai_id = $this->input->post('rekap_nilai_id', true);
+        $alasan = $this->input->post('alasan', true);
+        $saran = $this->input->post('saran', true);
+        $status = $this->input->post('status', true);
 
         $data = [
+            "alasan" => $alasan,
+            "saran" => $saran,
             "status" => $status,
         ];
         
-        $this->db->where('id', $nilai_id);
+        $this->db->where('id', $id);
         $this->db->update('nilai', $data);
+        redirect('penilai/pak/validasi/'.$rekap_nilai_id);
     }
 
     public function ceksemuavalidasi($id)
@@ -235,7 +241,7 @@ class Pak extends CI_Controller {
 
                 // Konfersi ke skala Permenegpan no 16 tahun 2009
                 $NPK = $this->konfersi($hasilnpkg);
-
+                
                 // ambil nilai  akk,  akpkb, dan akp dari jabatan
                 $rekap_nilai = $this->db->get_where('rekap_nilai',['id' => $nilai->rekap_nilai_id])->row();
 
@@ -256,24 +262,7 @@ class Pak extends CI_Controller {
                         // TOTAL PB DAN TTMJ
                         if($Query_TTMJ){
                             // JIKA PUNYA TUGAS TAMBAHAN
-                            // guru mengajar biasa, ambil jam mengajar, normal 24-40
-                            if($jabatan_fungsional->tugas == "Guru Mata Pelajaran / Guru kelas"){
-                                // JIKA GURU MENGAJAR
-                                if($Query_TTMJ->jabatan_fungsional_id == 1){
-                                    // KEPALA SEKOLAH MENGAJAR 6 JAM
-                                    $JWM = 6;
-                                    // HITUNG ANGKA KREDIT PER TAHUN
-                                    echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
-
-                                } else {
-                                    // SELAIN KEPALA SEKOLAH MENGAJAR 12 JAM
-                                    $JWM = 12;
-                                    // HITUNG ANGKA KREDIT PER TAHUN
-                                    echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
-                                    
-                                }
-
-                            } else {
+                            if($jabatan_fungsional->tugas == "Guru Bimbingan"){
                                 // JIKA GURU BP
                                 if($Query_TTMJ->jabatan_fungsional_id == 1){
                                     // KEPALA SEKOLAH MENANGANI 35 orang
@@ -288,12 +277,40 @@ class Pak extends CI_Controller {
                                     echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
                                     
                                 }
+
+                            } else {
+                                // JIKA GURU MENGAJAR
+                                if($Query_TTMJ->jabatan_fungsional_id == 1){
+                                    // KEPALA SEKOLAH MENGAJAR 6 JAM
+                                    $JWM = 6;
+                                    // HITUNG ANGKA KREDIT PER TAHUN
+                                    echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
+
+                                } else {
+                                    // SELAIN KEPALA SEKOLAH MENGAJAR 12 JAM
+                                    $JWM = 12;
+                                    // HITUNG ANGKA KREDIT PER TAHUN
+                                    echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
+                                }
+                                
                             }
                         
                         } else {
                             // TIDAK PUNYA TUGAS TAMBAHAN
-                            // guru mengajar biasa, ambil jam mengajar, normal 24-40
-                            if($jabatan_fungsional->tugas == "Guru Mata Pelajaran / Guru kelas"){
+                            if($jabatan_fungsional->tugas == "Guru Bimbingan"){
+                                // guru bp MENANGANI normal 150-250 orang 1 tahun
+                                if($JM < 150){
+                                    $JWM = 150;
+                                } else if($JM >= 150 && $JM <= 250){
+                                    $JWM = $JM;
+                                } else if($JM > 250) {
+                                    $JWM = 250;
+                                }
+                                // HITUNG ANGKA KREDIT PER TAHUN
+                                echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
+                            
+                            } else {
+                                // guru mengajar normal 24-40 jam 1 mnggu
                                 if($JM < 24){
                                     $JWM = 24;
                                 } else if($JM >= 24 && $JM <= 40){
@@ -303,14 +320,8 @@ class Pak extends CI_Controller {
                                 }
 
                                 // HITUNG ANGKA KREDIT PER TAHUN
-                                echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;die;
-
-                            } else {
-                                // guru bp MENANGANI 150 orang
-                                $JWM = 150;
-                                // HITUNG ANGKA KREDIT PER TAHUN
                                 echo $AKPT = (($AK-$AKPKB-$AKP) * $JM/$JWM * $NPK/100 ) / 4;
-                                // die;
+
                             }
                         }        
                             

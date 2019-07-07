@@ -25,37 +25,53 @@
                     <td>Unsur</td>
                     <td>Sub Unsur Penilaian</td>
                     <td>Butir Kegiatan</td>
+                    <td>Status</td>
                     <td>Berkas</td>
-                    <td>Opsi</td>
+                    <td style="width: 250px;">Opsi</td>
                 </tr>
             </thead>
             <tbody>
             
                 <tr>
-                    <td colspan="5">
+                    <td colspan="6">
                         Unsur Utama Pendidikan
                     </td>
                 </tr>
 
-                <?php foreach($kegiatan as $k):
-                   
+                <?php
+                foreach($kegiatan as $k):
+                
                 $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['kegiatan_id' => $k->kegiatan_id])->row();
-               
 
-                if($jabatan_fungsional){ ?>
-                <!-- Ini untuk PEMBELAJARAN/ BIMBINGAN DAN TUGAS TERTENTU -->
+                if($jabatan_fungsional){ 
+                    
+                    $nilai = $this->db->get_where('nilai',['id' => $k->nilai_id])->row();
+
+                    ?>
+                    <!-- Ini untuk PEMBELAJARAN/ BIMBINGAN DAN TUGAS TERTENTU -->
                 <tr>
                     <td><?= $k->unsur; ?></td>
                     <td><?= $k->sub_unsur; ?></td>
                     <td><?= $k->kegiatan; ?></td>
+                    <td><?php if($k->status == 1) : ?>
+                        <span class="badge badge-success">
+                            Sudah divalidasi
+                        </span>
+                        <?php elseif($k->status == 2) : ?>
+                        <span class="badge badge-danger">
+                            Tidak valid
+                        </span>
+                        <?php else : ?>
+                        <span class="badge badge-warning">
+                            Belum divalidasi
+                        </span>
+                        <?php endif ?>
+                    </td>
                     <td><a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary">Lihat Berkas</a></td>
                     <td>
-                        <a class="btn btn-warning btn-sm" href="#" data-toggle="modal" data-target="#nilai<?= $jabatan_fungsional->jenis; ?>">Nilai</a>
+                        <a class="btn btn-warning btn-sm btn-block" href="#" data-toggle="modal" data-target="#nilai<?= $jabatan_fungsional->jenis; ?>">Nilai</a>
                     </td>
-
                 </tr>
-
-                <?php $nilai = $this->db->get_where('nilai',['id' => $k->nilai_id])->row(); ?>
                 
                 <?php if($jabatan_fungsional->jenis == "pb") : ?>
                 <!-- modal Unsur pembelajaran / BK -->
@@ -116,6 +132,7 @@
                         </div>
                     </form>
                 </div>
+
                 <?php elseif($jabatan_fungsional->jenis == "ttmj") : ?>
                 <!-- modal Tugas tambahan mengurangi jam -->
                 <div class="modal fade" id="nilaittmj" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -264,30 +281,76 @@
                 <?php } else { ?>
 
                 <!-- Ini selain PEMBELAJARAN/ BIMBINGAN DAN TUGAS TERTENTU -->
-                <tr>
-                    <td><?= $k->unsur; ?></td>
-                    <td><?= $k->sub_unsur; ?></td>
-                    <td><?= $k->kegiatan; ?></td>
-                    <td><a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary">Lihat Berkas</a></td>
-                    <td>
-                        <form action="" method="post" multipart>
-                            <div class="form-check">
-                                <input class="form-check-input cek-validasi" type="radio" name="<?= $k->nilai_id ?>" id="<?= $k->kegiatan ?>valid" value="1" data-id="<?= $k->nilai_id; ?>" data-validasi="1" data-rekapid="<?= $k->rekap_nilai_id; ?>" <?php if($k->status == 1){ echo "checked"; }?>>
-                                <label class="form-check-label" for="<?= $k->kegiatan ?>valid">
-                                    Valid
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input cek-validasi" type="radio" name="<?= $k->nilai_id ?>" id="<?= $k->kegiatan ?>tidak" value="2" data-id="<?= $k->nilai_id; ?>" data-validasi="2" data-rekapid="<?= $k->rekap_nilai_id; ?>" <?php if($k->status == 2){ echo "checked"; }?>>
-                                <label class="form-check-label" for="<?= $k->kegiatan ?>tidak">
-                                    Tidak Valid
-                                </label>
-                            </div>
-                        </form>
-                    </td>
+                    <tr>
+                        <td><?= $k->unsur; ?></td>
+                        <td><?= $k->sub_unsur; ?></td>
+                        <td><?= $k->kegiatan; ?></td>
+                        <td><?php if($k->status == 1) : ?>
+                            <span class="badge badge-success">
+                                Sudah divalidasi
+                            </span>
+                            <?php elseif($k->status == 2) : ?>
+                            <span class="badge badge-danger">
+                                Tidak valid
+                            </span>
+                            <?php else : ?>
+                            <span class="badge badge-warning">
+                                Belum divalidasi
+                            </span>
+                            <?php endif ?>
+                        </td>
+                        <td><a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary">Lihat Berkas</a></td>
+                        <td>
+                            <a class="btn btn-warning btn-sm btn-block" href="#" data-toggle="modal" data-target="#nilai<?= $k->nilai_id ?>">Nilai</a>
+                        </td>
+                    </tr> 
 
-                </tr> 
-                
+                    <div class="modal fade" id="nilai<?= $k->nilai_id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <form id="form2" action="<?= base_url('penilai/pak/lakukanvalidasi/'.$k->nilai_id); ?>" method="post" multipart>
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Nilai Berkas</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="rekap_nilai_id" value="<?= $k->rekap_nilai_id ?>">
+
+                                        <label for="status">Validasi Berkas</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="status" id="valid" value="1" <?php if($k->status == 1){ echo "checked"; }?> required>
+                                            <label class="form-check-label" for="valid">
+                                                Valid
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="status" id="tidak_valid" value="2" <?php if($k->status == 2){ echo "checked"; }?> required>
+                                            <label class="form-check-label" for="tidak_valid">
+                                                Tidak Valid
+                                            </label>
+                                            <?= form_error('status','<small class="text-danger">','</small>'); ?>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                            <label for="alasan">Alasan</label>
+                                            <textarea name="alasan" id="alasan" class="form-control"><?= $k->alasan ?></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="saran">Saran</label>
+                                            <textarea name="saran" id="saran" class="form-control"><?= $k->saran ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
                 <?php
                 } endforeach; ?>
             </tbody>
@@ -295,7 +358,7 @@
 
         <form action="<?= base_url('penilai/pak/ceksemuavalidasi/'.$k->rekap_nilai_id); ?>" method="post">
             <button type="submit" name="simpan" class="btn btn-primary">Berikutnya</button>
-            <a href="<?= base_url('penilai/pak/validasi/'.$k->rekap_nilai_id) ?>" class="btn btn-secondary">Kembali</a>
+            <a href="<?= base_url('penilai/pak/') ?>" class="btn btn-secondary">Kembali</a>
         </form>
 
         <br><br>

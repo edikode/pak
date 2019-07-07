@@ -132,17 +132,20 @@
             const dataValidasi = $(this).data('validasi');
             const dataRekapId = $(this).data('rekapid');
 
-            $.ajax({
-                url: "<?= base_url('penilai/pak/lakukanvalidasi'); ?>",
-                type: 'post',
-                data: {
-                    dataId: dataId,
-                    dataValidasi: dataValidasi,
-                },
-                success: function(){
-                    document.location.href = "<?= base_url('penilai/pak/validasi/'); ?>" + dataRekapId;
-                }
-            });
+            if( dataRekapId ){
+                document.getElementById('form2').submit();
+            }
+            // $.ajax({
+            //     url: "<?= base_url('penilai/pak/lakukanvalidasi'); ?>",
+            //     type: 'post',
+            //     data: {
+            //         dataId: dataId,
+            //         dataValidasi: dataValidasi,
+            //     },
+            //     success: function(){
+            //         document.location.href = "<?= base_url('penilai/pak/validasi/'); ?>" + dataRekapId;
+            //     }
+            // });
         });
 
     </script>

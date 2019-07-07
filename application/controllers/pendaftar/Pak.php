@@ -60,7 +60,7 @@ class Pak extends CI_Controller {
                     $jenis = $jabatan_fungsional->jenis;
                     $jabatan_fungsional_id = $jabatan_fungsional->id;
                 } else {
-                    $jenis = $jabatan_fungsional->jenis;
+                    $jenis = "";
                     $jabatan_fungsional_id = "";
                 }
                 
@@ -95,7 +95,7 @@ class Pak extends CI_Controller {
         $queryKegiatan = "SELECT `kegiatan`.`unsur_id`, `kegiatan`.`kode`, 
                         `kegiatan`.`kegiatan`, `kegiatan`.`satuan`, 
                         `kegiatan`.`angka_kredit`, `kegiatan`.`pelaksana`,
-                        `unsur`.`unsur`, `unsur`.`sub_unsur`, `nilai`.`status`, `nilai`.`file`, `nilai`.`id`
+                        `unsur`.`unsur`, `unsur`.`sub_unsur`, `nilai`.`status`, `nilai`.`judul`, `nilai`.`file`, `nilai`.`id`
                         FROM `kegiatan` 
                         JOIN `unsur`
                         ON `kegiatan`.`unsur_id` = `unsur`.`id`
@@ -107,9 +107,8 @@ class Pak extends CI_Controller {
         $data['kegiatan'] = $this->db->query($queryKegiatan)->result();
 
         if($this->input->post('nilai_id')) {
-
-            // $upload_image = $_FILES['file'];
-            // var_dump($upload_image);die;
+            $upload_image = $_FILES['file'];
+            // var_dump($this->input->post('nilai_id'));die;
             $nilai_id = $this->input->post('nilai_id');
             $queryData = "SELECT `kegiatan`.`kode`
                         FROM `kegiatan` 
@@ -136,12 +135,16 @@ class Pak extends CI_Controller {
 
             if($this->upload->do_upload('file'))
             {
-                $nama_file = $this->upload->data('file_name');
+                $name_file = $this->upload->data('file_name');
 
-                $this->db->set('file', $nama_file);
-                $this->db->set('status', 0);
-                $this->db->where('id',$this->input->post('nilai_id'));
-                $this->db->update('nilai');
+                $data = [
+                    "judul" => $this->input->post('judul'),
+                    "file" => $name_file,
+                    "status" => 0,
+                ];
+                
+                $this->db->where('id', $nilai_id);
+                $this->db->update('nilai', $data);
 
                 $this->session->set_flashdata('flash',"File Berhasil diupload");
                 
@@ -156,13 +159,9 @@ class Pak extends CI_Controller {
 
             
         } else {
-            
             $data['_view']= "pendaftar/pak/upload";
             $this->load->view('template/index', $data);
         }
-
-        
-
     }
 
     public function cek_berkas($id = null)
@@ -181,6 +180,33 @@ class Pak extends CI_Controller {
 
             redirect('pendaftar/pak');
         }
+    }
+
+    public function cetaklaporan($id)
+    {
+        // echo $_SERVER["DOCUMENT_ROOT"].'/pak/assets/img/logodinas.png'; die;
+        $queryKegiatan = "SELECT `kegiatan`.`id` as kegiatan_id, `nilai`.`id` as nilai_id, `nilai`.`status`,
+                            `nilai`.`alasan`, `nilai`.`saran`, `nilai`.`judul`, `kegiatan`.`unsur_id`, `kegiatan`.`kode`, 
+                            `kegiatan`.`kegiatan`, `kegiatan`.`satuan`, 
+                            `kegiatan`.`angka_kredit`, `kegiatan`.`pelaksana`,
+                            `unsur`.`unsur`, `unsur`.`sub_unsur`, 
+                            `nilai`.`file`, `nilai`.`rekap_nilai_id` as `rekap_nilai_id`
+                            FROM `kegiatan` 
+                            JOIN `unsur`
+                            ON `kegiatan`.`unsur_id` = `unsur`.`id`
+                            JOIN `nilai`
+                            ON `kegiatan`.`id` = `nilai`.`kegiatan_id`
+                            WHERE `nilai`.`rekap_nilai_id` = $id
+                            ORDER BY `kegiatan`.`id` 
+                            ";
+
+        $data['kegiatan'] = $this->db->query($queryKegiatan)->result();
+
+        $this->load->library('pdf');
+
+        $this->pdf->setPaper('A4', 'potrait');
+        $this->pdf->filename = "laporan hasil pengajuan.pdf";
+        $this->pdf->load_view('pdf/laporan_hasil_pengajuan', $data);
     }
 
 }
