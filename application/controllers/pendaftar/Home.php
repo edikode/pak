@@ -11,7 +11,10 @@ class Home extends CI_Controller {
 
     public function index()
     {
-        $data['_view']= "admin/home";
+        // refisi dasbord pendaftar di isi detail data guru, dan foto
+        $data['pendaftar'] = $this->db->get_where('pendaftar',['id' => $this->session->userdata('id')])->row();
+        
+        $data['_view']= "pendaftar/home";
 
         $this->load->view('template/index', $data);
     }

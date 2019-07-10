@@ -61,6 +61,7 @@ class Pak extends CI_Controller {
         $status = $this->input->post('status', true);
 
         $data = [
+            "tanggal"
             "alasan" => $alasan,
             "saran" => $saran,
             "status" => $status,

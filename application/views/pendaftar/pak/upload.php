@@ -83,7 +83,8 @@
 
                             <?php else : ?>
                             <div class="mb-2">Judul Berkas: <?= $k->judul ?></div>
-                            <a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary">Lihat Berkas</a>
+                            <a href="<?= base_url('uploads/'.$k->file); ?>" target="_blank" class="badge badge-primary mr-1">Lihat Berkas</a>
+                            <a href="<?= base_url('pendaftar/pak/hapus/'.$k->id.'/'.$rekap_nilai_id); ?>"  class="badge badge-danger">delete</a>
 
                             <?php endif ?>
 
@@ -96,7 +97,15 @@
         </table>
 
         <form action="<?= base_url('pendaftar/pak/cek_berkas/'.$rekap_nilai_id) ?>" method="post">
-            <button type="submit" name="simpan" class="btn btn-primary">Save</button>
+            <a href="<?= base_url('pendaftar/pak/') ?>" class="btn btn-secondary">Kembali</a>
+            <?php 
+            $status = $this->db->get_where('rekap_nilai',['id' => $rekap_nilai_id])->row();
+
+            if($status->lengkap == 0) : ?>
+                <a href="<?= base_url('pendaftar/pak/tambahkegiatan/'.$rekap_nilai_id) ?>" class="btn btn-info">Tambah Kegiatan</a>
+            <?php endif ?>
+            
+            <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
         </form>
     
 

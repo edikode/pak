@@ -11,6 +11,19 @@ class Pak extends CI_Controller {
 
     public function index()
     {
+        $id = $this->session->userdata('id');
+        $queryRekapNilai = "SELECT `pendaftar`.*, `rekap_nilai`.*
+                        FROM `rekap_nilai` 
+                        JOIN `pendaftar`
+                        ON `rekap_nilai`.`pendaftar_id` = `pendaftar`.`id`
+                        JOIN `nilai`
+                        ON `rekap_nilai`.`id` = `nilai`.`rekap_nilai_id`
+                        where `pendaftar`.`id` = $id 
+                        GROUP BY `rekap_nilai`.`tanggal` 
+                        ORDER BY `rekap_nilai`.`id` DESC
+                        ";
+        $data['rekap_nilai'] = $this->db->query($queryRekapNilai)->result();
+
         $data['_view']= "pendaftar/pak/home";
 
         $this->load->view('template/index', $data);
@@ -84,6 +97,66 @@ class Pak extends CI_Controller {
 
         } else {
             $data['_view']= "pendaftar/pak/pengajuan";
+            $this->load->view('template/index', $data);
+        }
+    }
+
+    public function tambahkegiatan($id)
+    {
+        $queryKegiatan = "SELECT `kegiatan`.`id`, `kegiatan`.`unsur_id`, `kegiatan`.`kode`, 
+                        `kegiatan`.`kegiatan`, `kegiatan`.`satuan`, 
+                        `kegiatan`.`angka_kredit`, `kegiatan`.`pelaksana`,
+                        `unsur`.`unsur`, `unsur`.`sub_unsur`
+                        FROM `kegiatan` 
+                        JOIN `unsur`
+                        ON `kegiatan`.`unsur_id` = `unsur`.`id`
+                        GROUP BY `kegiatan`.`unsur_id` 
+                        ORDER BY `kegiatan`.`id` 
+                        ";
+        $data['kegiatan'] = $this->db->query($queryKegiatan)->result();
+
+        if($this->input->post('pendaftar_id')){
+
+            $kegiatan_id = $this->input->post('kegiatan_id');
+
+            foreach ($kegiatan_id as $kegiatan_id) {
+
+                $cekkegiatan = $this->db->get_where('nilai',['kegiatan_id' => $kegiatan_id, 'rekap_nilai_id' => $id])->row();
+
+                if(!$cekkegiatan){
+                
+                    $jabatan_fungsional = $this->db->get_where('jabatan_fungsional',['kegiatan_id' => $kegiatan_id])->row();
+
+                    // jika tidak ada hubungannya dengan jabatan fungsional, jenis default kosong
+                    if($jabatan_fungsional){
+                        $jenis = $jabatan_fungsional->jenis;
+                        $jabatan_fungsional_id = $jabatan_fungsional->id;
+                    } else {
+                        $jenis = "";
+                        $jabatan_fungsional_id = "";
+                    }
+                    
+                    // insert detail data ke tabel nilai
+                    $dataNilai = [
+                        "jenis" => $jenis,
+                        "tanggal" => time(),
+                        "status" => 0,
+                        "kegiatan_id" => $kegiatan_id,
+                        "jabatan_fungsional_id" => $jabatan_fungsional_id,
+                        "rekap_nilai_id" => $id,
+
+                    ];
+                    $this->db->insert('nilai',$dataNilai);
+                }
+            }
+
+            $this->session->set_flashdata('flash',"Silahkan Upload File");
+
+            redirect('pendaftar/pak/upload/'.$id);
+
+
+        } else {
+            $data['_view']= "pendaftar/pak/tambahkegiatan";
             $this->load->view('template/index', $data);
         }
     }
@@ -212,6 +285,22 @@ class Pak extends CI_Controller {
         $this->pdf->setPaper('legal', 'potrait');
         $this->pdf->filename = "laporan hasil pengajuan.pdf";
         $this->pdf->load_view('pdf/laporan_hasil_pengajuan', $data);
+    }
+
+    public function hapus($id,$id_rekap)
+    {
+        $data = [
+            "judul" => "",
+            "file" => "",
+            "status" => 0,
+        ];
+        
+        $this->db->where('id', $id);
+        $this->db->update('nilai', $data);
+
+        $this->session->set_flashdata('flash',"Berkas Berhasil dihapus");
+                
+        return redirect('pendaftar/pak/upload/'.$id_rekap);
     }
 
 }

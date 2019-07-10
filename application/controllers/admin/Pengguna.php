@@ -25,7 +25,8 @@ class Pengguna extends CI_Controller {
 
     public function detail($id)
     {
-        $queryUser = "SELECT `user`.`id`, `user`.`username`, 
+        $queryUser = "SELECT `user`.`id`, `user`.`pendaftar_id`, 
+                        `user`.`pegawai_id`, `user`.`username`, 
                         `user`.`is_active`, `role`.`nama` as `level`, `user`.`pegawai_id`
                         FROM `user` 
                         JOIN `role`
