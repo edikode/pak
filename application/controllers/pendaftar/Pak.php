@@ -202,9 +202,14 @@ class Pak extends CI_Controller {
 
         $data['kegiatan'] = $this->db->query($queryKegiatan)->result();
 
+        $data['pendaftar'] = $this->db->get_where('pendaftar',['id' => $this->session->userdata('id')])->row();
+
         $this->load->library('pdf');
 
-        $this->pdf->setPaper('A4', 'potrait');
+        // $customPaper = array(0,0,360,360);
+        // $this->pdf->set_paper($customPaper);
+
+        $this->pdf->setPaper('legal', 'potrait');
         $this->pdf->filename = "laporan hasil pengajuan.pdf";
         $this->pdf->load_view('pdf/laporan_hasil_pengajuan', $data);
     }

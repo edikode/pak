@@ -35,6 +35,11 @@
       <span>Data Pegawai</span></a>
     </li>
     <li class="nav-item">
+      <a class="nav-link" href="<?= base_url('admin/pak'); ?>">
+        <i class="fas fa-fw fa-list-ul"></i>
+        <span>PAK</span></a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" href="<?= base_url('admin/unsur'); ?>">
       <i class="fas fa-fw fa-list-ul"></i>
       <span>Unsur Kegiatan</span></a>
