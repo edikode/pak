@@ -85,7 +85,9 @@
                             </table>
                         </div>
                         <div class="col-md-3">
-                            <img src="<?= base_url('assets/img/'.$this->session->userdata('gambar')); ?>" class="card-img" alt="<?= $this->session->userdata('nama'); ?>">
+                            <?php $datagambar = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row() ?>
+                            
+                            <img src="<?= base_url('assets/img/'.$datagambar->gambar); ?>" class="card-img" alt="<?= $this->session->userdata('nama'); ?>">
                         </div>
                     </div>
                 </div>

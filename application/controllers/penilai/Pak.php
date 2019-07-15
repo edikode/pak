@@ -61,7 +61,6 @@ class Pak extends CI_Controller {
         $status = $this->input->post('status', true);
 
         $data = [
-            "tanggal"
             "alasan" => $alasan,
             "saran" => $saran,
             "status" => $status,
@@ -154,7 +153,7 @@ class Pak extends CI_Controller {
                     if($AKK >= $jabatan->perjenjang){
 
                         $this->db->where('id', $id);
-                        $this->db->update('rekap_nilai', ['status' => 1]);
+                        $this->db->update('rekap_nilai', ['status' => 1, 'tanggal_validasi' => time()]);
 
                         // SIMPAN NILAI ANGKA KREDIT KESELURUHAN DI REKAP NILAI
                         $this->db->where('id', $id);
@@ -169,7 +168,7 @@ class Pak extends CI_Controller {
                     } else {
 
                         $this->db->where('id', $id);
-                        $this->db->update('rekap_nilai', ['status' => 3]);
+                        $this->db->update('rekap_nilai', ['status' => 3, 'tanggal_validasi' => time()]);
                         
                         // SIMPAN NILAI ANGKA KREDIT KESELURUHAN DI REKAP NILAI
                         $this->db->where('id', $id);

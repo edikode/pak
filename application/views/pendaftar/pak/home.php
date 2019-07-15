@@ -16,6 +16,7 @@
                         <th>Nama Pendaftar</th>
                         <th>Pengajuan Ke</th>
                         <th>Tanggal Pengajuan</th>
+                        <th>Tanggal Validasi</th>
                         <th>Jumlah AK</th>
                         <th>Status</th>
                         <th>Alamat Sekolah</th>
@@ -29,6 +30,7 @@
                                 <td><?= $r->nama; ?></td>
                                 <td align="center"><?= $r->pengajuan_ke; ?></td>
                                 <td><?= date('d-m-Y',$r->tanggal) ?></td>
+                                <td><?php if($r->tanggal_validasi != 0){ echo date('d-m-Y',$r->tanggal_validasi); } ?></td>
                                 <td><?= $r->hasil_akk ?></td>
                                 <td><?php 
                                     if($r->status == 0){ 
@@ -43,7 +45,8 @@
                                 </td>
                                 <td><?= $r->alamat_sekolah; ?></td>
                                 <td>
-                                    <a href="<?= base_url('pendaftar/pak/upload/'.$r->id) ?>" class="badge badge-info float-right mr-1">Detail</a>
+                                <a href="<?= base_url('pendaftar/pak/upload/'.$r->id) ?>" class="badge badge-info float-right mr-1 mb-1">Detail</a>
+                                <a href="<?= base_url('pendaftar/pak/cetaklaporan/'.$r->id) ?>" class="badge badge-warning float-right mr-1" target="_blank">Cetak</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
